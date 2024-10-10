@@ -1,0 +1,88 @@
+CREATE TABLE anggota_perpustakaan (
+
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    nama VARCHAR(100),
+
+    nim CHAR(20) unique,
+
+    prodi VARCHAR(20) ,
+
+    data_peminjaman ENUM('ada', 'tidak ada') 
+
+);
+
+
+
+
+CREATE TABLE peminjaman_buku (
+
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    nim INT,
+
+     judul_buku varchar(20),
+     tanggal_peminjaman char,
+     tanggal_pengembalian char,
+    
+    
+
+    FOREIGN KEY (nim) REFERENCES anggota_perpustakaan(id)
+
+);
+
+
+
+
+CREATE TABLE peminjaman_ruangan (
+
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    nim INT (10),
+
+    prodi VARCHAR(20) ,
+
+    ruangan varchar (20),
+    waktu_peminjaman varchar(20),
+    waktu_pengembalian varchar(20)
+
+    FOREIGN KEY (nim) REFERENCES anggota_perpustakaan(id)
+
+);
+
+
+
+
+CREATE TABLE Laporan (
+
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    jenis_laporan ENUM('data peminjaman buku', 'Data peminjaman ruangan'),
+
+    periode_mulai DATE,
+
+    periode_selesai DATE,
+
+    tanggal_dibuat DATE
+
+);
+
+
+SELECT * FROM anggota_perpustakaan;
+
+SELECT * FROM peminjaman_buku
+WHERE tanggal_peminjaman BETWEEN '2023-01-01' AND '2023-12-31';
+
+SELECT a.nama, b.judul_buku
+FROM anggota_perpustakaan 
+INNER JOIN peminjaman_buku  On nim;
+
+SELECT nim, COUNT(*) AS jumlah_buku
+FROM peminjaman_buku
+GROUP BY nim;
+
+SELECT * FROM peminjaman_buku
+WHERE tanggal_pengembalian IS NULL;
+
+INSERT INTO Laporan (jenis_laporan, periode_mulai, periode_selesai, tanggal_dibuat)
+VALUES ('data peminjaman buku', '2023-01-01', '2023-12-31', CURDATE());
